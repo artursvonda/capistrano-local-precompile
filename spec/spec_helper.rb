@@ -8,7 +8,7 @@ unless ENV['CI']
   end
 end
 
-require 'capistrano-local-precompile'
+require 'capistrano/local_precompile'
 require 'rspec'
 require 'capistrano-spec'
 
