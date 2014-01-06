@@ -1,7 +1,7 @@
 # encoding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'capistrano-local-precompile/version'
+require 'version'
 
 Gem::Specification.new do |gem|
   gem.name        = 'capistrano-local-precompile'
@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
 
   gem.license     = 'MIT'
 
-  gem.add_dependency 'capistrano', '~> 2'
+  gem.add_dependency 'capistrano', '~> 3'
 
   gem.files = %w(.yardopts LICENSE.md README.md Rakefile capistrano-local-precompile.gemspec)
   gem.files += Dir.glob("lib/**/*.rb")
