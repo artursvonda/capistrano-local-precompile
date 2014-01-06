@@ -17,10 +17,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'capistrano', '~> 3'
 
-  gem.files = %w(.yardopts LICENSE.md README.md Rakefile capistrano-local-precompile.gemspec)
-  gem.files += Dir.glob("lib/**/*.rb")
-  gem.files += Dir.glob("spec/**/*")
-
+  gem.files = `git ls-files`.split($/)
   gem.test_files = Dir.glob("spec/**/*")
 
   gem.require_paths = ['lib']
