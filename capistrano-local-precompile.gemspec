@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = CapistranoLocalPrecompile::VERSION
   gem.homepage      = 'https://github.com/spagalloco/capistrano-local-precompile'
 
-  gem.author        = "Steve Agalloco"
+  gem.authors       = ["Steve Agalloco", "Arturs Vonda"]
   gem.email         = 'steve.agalloco@gmail.com'
   gem.description   = 'Local asset-pipeline precompilation for Capstrano'
   gem.summary       = gem.description
