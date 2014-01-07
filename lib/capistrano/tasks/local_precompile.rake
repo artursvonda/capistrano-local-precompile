@@ -1,12 +1,12 @@
 namespace :load do
   task :defaults do
-    set(:precompile_cmd)   { "exec rake assets:precompile" }
-    set(:cleanexpired_cmd) { "exec rake assets:clean_expired" }
-    set(:assets_dir)       { "public/assets" }
+    set :precompile_cmd, "exec rake assets:precompile"
+    set :cleanexpired_cmd, "exec rake assets:clean_expired"
+    set :assets_dir, "public/assets"
 
-    set(:turbosprockets_enabled)    { false }
-    set(:turbosprockets_backup_dir) { "public/.assets" }
-    set(:rsync_cmd)                 { "rsync -av" }
+    set :turbosprockets_enabled, false
+    set :turbosprockets_backup_dir, "public/.assets"
+    set :rsync_cmd, "rsync -av"
 
     before "deploy:assets:precompile", "deploy:assets:prepare"
     after "deploy:assets:precompile", "deploy:assets:cleanup"
