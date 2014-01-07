@@ -1,14 +1,10 @@
 namespace :load do
   task :defaults do
-    set :precompile_cmd, "exec rake assets:precompile"
-    set :cleanexpired_cmd, "exec rake assets:clean_expired"
+    set :precompile_cmd, "assets:precompile"
     set :assets_dir, "public/assets"
 
-    set :turbosprockets_enabled, false
-    set :turbosprockets_backup_dir, "public/.assets"
-    set :rsync_cmd, "rsync -av"
-
-    before 'deploy:updated', 'deploy:assets:prepare'
+    after 'deploy:updating', 'deploy:assets:prepare'
+    before 'deploy:updated', 'deploy:assets:precompile'
     after 'deploy:finished', 'deploy:assets:cleanup'
   end
 end
@@ -18,29 +14,28 @@ namespace :deploy do
 
     task :cleanup do
       run_locally do
-        if fetch(:turbosprockets_enabled)
-          run "mv #{fetch(:assets_dir)} #{fetch(:turbosprockets_backup_dir)}"
-        else
-          run "rm -rf #{fetch(:assets_dir)}"
-        end
+        execute "rm -rf #{fetch(:assets_dir)}"
       end
     end
 
     task :prepare do
       run_locally do
-        if fetch(:turbosprockets_enabled)
-          run "mkdir -p #{fetch(:turbosprockets_backup_dir)}"
-          run "mv #{fetch(:turbosprockets_backup_dir)} #{fetch(:assets_dir)}"
-          execute :bundle, fetch(:cleanexpired_cmd)
+        old_prefix = nil
+        if SSHKit.config.command_map.prefix[:rake].join(' ').include? 'rvm'
+          old_prefix = SSHKit.config.command_map.prefix[:rake].clone
+          SSHKit.config.command_map.prefix[:rake].clear
         end
-        execute :bundle, fetch(:precompile_cmd)
+        execute :rake, fetch(:precompile_cmd)
+        if old_prefix
+          SSHKit.config.command_map.prefix[:rake].push *old_prefix
+        end
       end
     end
 
     desc "Precompile assets locally and then rsync to app servers"
     task :precompile do
-      on hosts do |host|
-        upload! "./#{fetch(:assets_dir)}/", "#{release_path}/#{fetch(:assets_dir)}/", recursive: true
+      on roles(:web) do |host|
+        upload! "#{ fetch :assets_dir }/", "#{ release_path }/#{ fetch :assets_dir }/", recursive: true, verbose: false
       end
     end
 
