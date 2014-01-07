@@ -8,8 +8,8 @@ namespace :load do
     set :turbosprockets_backup_dir, "public/.assets"
     set :rsync_cmd, "rsync -av"
 
-    before "deploy:assets:precompile", "deploy:assets:prepare"
-    after "deploy:assets:precompile", "deploy:assets:cleanup"
+    before 'deploy:updated', 'deploy:assets:prepare'
+    after 'deploy:finished', 'deploy:assets:cleanup'
   end
 end
 
